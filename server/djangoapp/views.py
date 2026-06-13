@@ -21,7 +21,6 @@ from .restapis import get_request, analyze_review_sentiments, post_review
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
-
 # Create your views here.
 
 # Create a `login_request` view to handle sign in request
@@ -113,7 +112,9 @@ def get_dealer_details(request, dealer_id):
     if(dealer_id):
         endpoint = "/fetchDealer/"+str(dealer_id)
         dealership = get_request(endpoint)
-        return JsonResponse({"status":200,"dealer":dealership})
+        if isinstance(dealership, list) and len(dealership) > 0:
+            dealership = dealership[0]
+        return JsonResponse(dealership, safe=False)
     else:
         return JsonResponse({"status":400,"message":"Bad Request"})
 
